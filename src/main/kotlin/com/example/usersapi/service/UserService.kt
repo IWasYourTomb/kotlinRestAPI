@@ -4,6 +4,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import com.example.usersapi.model.User
+import com.example.usersapi.model.UserDto
 import com.example.usersapi.repository.UserRepository
 import org.springframework.web.server.ResponseStatusException
 
@@ -13,17 +14,17 @@ class UserService(val repository : UserRepository){
 
     fun getById(id: Long): User = repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
-    fun create(user: User): User = repository.save(user)
+    fun create(dto: UserDto): User = repository.save(User.fromDTO(dto))
 
     fun remove (id: Long){
         if(repository.existsById(id)) repository.deleteById(id)
         else throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 
-    fun update(id: Long, user: User): User {
+    fun update(id: Long, dto: UserDto): User {
         return if (repository.existsById(id)) {
-            user.id = id
-            repository.save(user)
+            dto.id = id
+            repository.save(User.fromDTO(dto))
         } else throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 }
