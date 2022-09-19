@@ -14,7 +14,7 @@ class UserController(val service : UserService){
     @GetMapping("/{id}")
     fun getUser(@PathVariable id: Long) = service.getById(id)
 
-    @PostMapping()
+    @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     fun saveUser(@RequestBody dto: UserDto): UserDto = service.create(dto).toDto()
 
